@@ -36,7 +36,7 @@ public class UserController {
     增加标签
      */
     @RequestMapping(method = RequestMethod.POST)
-    public Result add(@PathVariable Label label){
+    public Result add( Label label){
         labelService.add(label);
         return new Result(true,StatusCode.OK,"增加成功");
     }
