@@ -153,5 +153,20 @@ public class ProblemService {
 		PageRequest pageRequest=PageRequest.of(page-1,size);
 		return problemDao.findNewListLabelId(lableId,pageRequest);
 	}
+	/**
+	 * 根据标签ID查询热门问题列表
+	 */
+	public Page<Problem> findHotListLabelId(String lableId,int page,int size){
+		PageRequest pageRequest=PageRequest.of(page-1,size);
+		return problemDao.findNewListLabelId(lableId,pageRequest);
+	}
+
+	/**
+	 * 根据标签ID查询等待回答列表
+	 */
+	public Page<Problem> findWaitListByLabelId(String lableId,int page,int size){
+		PageRequest pageRequest=PageRequest.of(page-1,size);
+		return problemDao.findWaitListByLabelId(lableId,pageRequest);
+	}
 
 }

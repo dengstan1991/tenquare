@@ -106,4 +106,22 @@ public class ProblemController {
 		PageResult<Problem> pageResult=new PageResult<>(pagelist.getTotalElements(),pagelist.getContent());
 		return new Result(true,StatusCode.OK,"查询成功",pageResult);
 	}
+	/**
+	 * 根据标签Id查询热门问题列表
+	 */
+	@RequestMapping(value = "/hotlist/{labelid}/{page}/{size}",method = RequestMethod.GET)
+	public Result findHotListByLabelId(@PathVariable String labelid,@PathVariable int page,@PathVariable int size){
+		Page<Problem> pagelist=problemService.findHotListLabelId(labelid,page,size);
+		PageResult<Problem> pageResult=new PageResult<>(pagelist.getTotalElements(),pagelist.getContent());
+		return new Result(true,StatusCode.OK,"查询成功",pageResult);
+	}
+	/**
+	 * 根据标签Id查询等待回答问题列表
+	 */
+	@RequestMapping(value = "/waitlist/{labelid}/{page}/{size}",method = RequestMethod.GET)
+	public Result findWaitListByLabelId(@PathVariable String labelid,@PathVariable int page,@PathVariable int size){
+		Page<Problem> pagelist=problemService.findWaitListByLabelId(labelid,page,size);
+		PageResult<Problem> pageResult=new PageResult<>(pagelist.getTotalElements(),pagelist.getContent());
+		return new Result(true,StatusCode.OK,"查询成功",pageResult);
+	}
 }
