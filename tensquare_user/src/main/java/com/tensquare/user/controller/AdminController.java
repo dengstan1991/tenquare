@@ -1,22 +1,14 @@
 package com.tensquare.user.controller;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.tensquare.user.pojo.Admin;
 import com.tensquare.user.service.AdminService;
-
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 /**
  * 控制器层
  * @author Administrator
@@ -104,5 +96,17 @@ public class AdminController {
 		adminService.deleteById(id);
 		return new Result(true,StatusCode.OK,"删除成功");
 	}
-	
+	/**
+	 * 用户登录
+	 */
+	@RequestMapping(value = "/login",method = RequestMethod.POST)
+	public Result login(@RequestBody Map<String,String> loginMap){
+		Admin admin=adminService.findByLoginnameAndPassword(loginMap.get("loginname"),
+				loginMap.get("password"));
+		if(admin!=null){
+			return new Result(true,StatusCode.OK,"登录成功");
+		}else {
+			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
+		}
+	}
 }
