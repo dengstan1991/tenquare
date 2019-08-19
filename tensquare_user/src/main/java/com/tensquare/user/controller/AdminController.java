@@ -7,7 +7,9 @@ import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import util.JwtUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 /**
  * 控制器层
@@ -21,7 +23,8 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
+	@Autowired
+	private JwtUtil jwtUtil;
 	
 	/**
 	 * 查询全部数据
@@ -101,10 +104,16 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
 	public Result login(@RequestBody Map<String,String> loginMap){
-		Admin admin=adminService.findByLoginnameAndPassword(loginMap.get("loginname"),
-				loginMap.get("password"));
+		Admin admin=adminService.findByLoginnameAndPassword(loginMap.get("loginname"),loginMap.get("password"));
+		System.out.println(admin);
 		if(admin!=null){
-			return new Result(true,StatusCode.OK,"登录成功");
+			//生成token
+			String token=jwtUtil.createJWT(admin.getId(),admin.getLoginname(),"admin");
+			System.out.println(token);
+			Map map=new HashMap();
+			map.put("token",token);
+			map.put("name",admin.getLoginname());
+			return new Result(true,StatusCode.OK,"登录成功",map);
 		}else {
 			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
 		}

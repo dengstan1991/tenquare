@@ -1,13 +1,18 @@
 package com.tensquare.user.controller;
+
 import com.tensquare.user.pojo.User;
 import com.tensquare.user.service.UserService;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import util.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 /**
  * 控制器层
@@ -21,10 +26,14 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private HttpServletRequest request;
+	@Autowired
+	private JwtUtil jwtUtil;
 	
 	
 	/**
-	 * 查询全部数据
+	 * 查询全部数据,根据前段传递的头信息，获取token并验证权限
 	 * @return
 	 */
 	@RequestMapping(method= RequestMethod.GET)
@@ -93,6 +102,10 @@ public class UserController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.DELETE)
 	public Result delete(@PathVariable String id ){
+		Claims claims= (Claims) request.getAttribute("admin_claims");
+		if(claims ==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
 		userService.deleteById(id);
 		return new Result(true,StatusCode.OK,"删除成功");
 	}
@@ -123,7 +136,13 @@ public class UserController {
 	public Result login(String mobile,String password){
 		User user=userService.findByMobileAndPassword(mobile,password);
 		if(user!=null){
-			return new Result(true,StatusCode.OK,"登录成功");
+			String token=jwtUtil.createJWT(user.getId(),user.getNickname(),"user");
+			System.out.println(token);
+			Map map=new HashMap();
+			map.put("token",token);
+			map.put("name",user.getNickname());
+			map.put("avatar",user.getAvatar());
+			return new Result(true,StatusCode.OK,"登录成功",map);
 		}else {
 			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
 		}

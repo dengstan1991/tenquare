@@ -15,3 +15,7 @@ spring:
     host: 192.168.42.2
   rabbitmq:
     host: 192.168.42.2
+jwt:
+  config:
+      key: stan
+      ttl: 36000

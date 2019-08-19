@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tensquare_sms" />
         <module name="tensquare_gathering" />
+        <module name="tensquare_token" />
         <module name="tensquare_base" />
         <module name="tensquare_qa" />
         <module name="tensquare_article" />
@@ -30,6 +31,7 @@
       <module name="tensquare_search" options="-parameters" />
       <module name="tensquare_sms" options="-parameters" />
       <module name="tensquare_spit" options="-parameters" />
+      <module name="tensquare_token" options="-parameters" />
       <module name="tensquare_user" options="-parameters" />
     </option>
   </component>

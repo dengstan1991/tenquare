@@ -33,7 +33,7 @@ public class AdminService {
 	@Autowired
 	private IdWorker idWorker;
 	@Autowired
-	BCryptPasswordEncoder encoder;
+	private BCryptPasswordEncoder encoder;
 
 	/**
 	 * 查询全部列表
